@@ -653,8 +653,8 @@ def on_closing():
 def audio_pred():
     global model_audio,zone_text_audio
 
-    result_string_audio=aud.prediction_audio("temp/audio_temporaire.mp3",model_audio)
-    zone_text_audio.configure(text=result_string_audio)
+    result_string_audio, proba=aud.prediction_audio("temp/audio_temporaire.mp3",model_audio)
+    zone_text_audio.configure(text=f"{result_string_audio} : {proba:.3f}")
     
 def confirme():
     global chk_state_audio
