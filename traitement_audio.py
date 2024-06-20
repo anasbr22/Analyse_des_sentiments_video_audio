@@ -59,7 +59,7 @@ def prediction_audio(path, model):
     
     # Obtenir l'indice de la classe prédite avec la probabilité maximale
     predicted_index = np.argmax(prediction)
-    
+
     # Vérifier si l'indice est valide
     if predicted_index < len(le.classes_):
         # Inverser la transformation et obtenir l'étiquette prédite
@@ -68,5 +68,5 @@ def prediction_audio(path, model):
         # Si l'indice est invalide, attribuer une étiquette par défaut
         predicted_label = unknown_label
     
-    return predicted_label
+    return predicted_label, prediction[0][predicted_index]
 

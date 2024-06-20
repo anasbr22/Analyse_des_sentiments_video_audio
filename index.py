@@ -512,8 +512,6 @@ def update_video(canvas):
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
                     prediction, proba = get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w]))
                     zone_text_video.config(text=f"{prediction} : {proba:.3f}")
-                    print(proba)
-                    #print(get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w])))
 
             cnt2 += 1
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
