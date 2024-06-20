@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from sklearn.metrics import accuracy_score
 import time
-from ResidualNetwork import ResidualMaskingNetwork
+from ResidualNetwork import RMN
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -16,7 +16,7 @@ def main():
         transforms.Grayscale(),  
         transforms.Resize((48, 48)),
         transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
+        transforms.Normalize((0.5), (0.5))
     ])
 
     
@@ -30,7 +30,7 @@ def main():
     train_loader = DataLoader(train_data, batch_size=32, shuffle=True, num_workers=4)
     val_loader = DataLoader(val_data, batch_size=32, shuffle=False, num_workers=4)
 
-    model = ResidualMaskingNetwork().to(device)
+    model = RMN().to(device)
     print(f"Model device: {next(model.parameters()).device}")
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)

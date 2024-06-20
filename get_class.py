@@ -19,13 +19,16 @@ model.eval()
 class_names=['angry', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 # print(class_names)
 
+
 def get_class(image):
     image = transform(image)
     image = image.unsqueeze(0)
     image = image.to(device)
     with torch.no_grad():
         outputs = model(image)
-        _, predicted_class = torch.max(outputs, 1)
+        probabilities = torch.nn.functional.softmax(outputs, dim=1)
+        top_prob, predicted_class = torch.max(probabilities, 1)
     predicted_class = predicted_class.item()
-    predicted_class_name = class_names[predicted_class] 
-    return predicted_class_name
+    predicted_class_name = class_names[predicted_class]
+    top_prob = top_prob.item()
+    return predicted_class_name, top_prob

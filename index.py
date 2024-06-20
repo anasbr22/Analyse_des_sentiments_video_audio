@@ -160,6 +160,7 @@ def show_home():
         vider_dossier()
 
     center_window(root, 350, 450)
+    root.resizable(False,False)
     clear_widgets()
 
     # Label text
@@ -184,6 +185,7 @@ def show_home():
 # afficher page import video
 def show_video_import():
     center_window(root, 1160, 640)
+    root.resizable(False,False)
     clear_widgets()
     create_widgets()
     create_widgets_result()
@@ -199,25 +201,17 @@ def show_camera():
     start_time = time.time()
     duration = 150  # Durée de la détection en secondes
     center_window(root, 1160, 640)
+    root.resizable(False,False)
     clear_widgets()
     create_widgets_camera()
 
 import_vid_button = tk.Button(root, text="Importer un video", font=font_button,padx=15,pady=10,bg=bg2,command=show_video_import)
 camera_button = tk.Button(root, text="Ouvrir la caméra", font=font_button,padx=15,pady=10,bg=bg2,command=show_camera)
 
-
-
-
-# supprimer tout les widgets
 def clear_widgets():
     for widget in root.winfo_children():
         widget.pack_forget()
         widget.grid_forget()
-
-
-
-
-
 
 
 # afficher live cam avec prediction
@@ -236,9 +230,10 @@ def show_camera_feed():
             # Dessiner des rectangles autour des visages détectés
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                prediction = get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w]))
+                prediction, proba = get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w]))
                 (text_w, text_h), baseline = cv2.getTextSize(prediction, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
                 cv2.putText(frame, prediction, (x, y-baseline-10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
 
             cv2_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             pil_image = Image.fromarray(cv2_image)
@@ -515,7 +510,9 @@ def update_video(canvas):
                 faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
                 for (x, y, w, h) in faces:
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    zone_text_video.config(text=get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w])))
+                    prediction, proba = get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w]))
+                    zone_text_video.config(text=f"{prediction} : {proba:.3f}")
+                    print(proba)
                     #print(get_class.get_class(Image.fromarray(frame[y:y+h, x:x+w])))
 
             cnt2 += 1
