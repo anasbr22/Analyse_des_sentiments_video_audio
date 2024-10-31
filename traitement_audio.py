@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Liste des classes
 classes =  ["sad" ,"surprise" ,"angry" ,"fear" ,"happy","neutral"]
-# ['happy', 'sad', 'angry', 'fear']
+# classes : "sad" ,"surprise" ,"angry" ,"fear" ,"happy","neutral"
 # Initialisation du label encoder
 le = LabelEncoder()
 le.fit(classes)
@@ -24,10 +24,10 @@ def generate_spectrogram(file_path, max_pad_len=128):
     
     # Adapter le spectrogramme à la taille fixe
     if log_spectrogram.shape[1] > max_pad_len:
-        log_spectrogram = log_spectrogram[:, :max_pad_len]
+        log_spectrogram = log_spectrogram[:,:max_pad_len]
     else:
         pad_width = max_pad_len - log_spectrogram.shape[1]
-        log_spectrogram = np.pad(log_spectrogram, pad_width=((0, 0), (0, pad_width)), mode='constant')
+        log_spectrogram = np.pad(log_spectrogram, pad_width=((0,0),(0,pad_width)), mode='constant')
     
     return log_spectrogram
 
@@ -44,7 +44,7 @@ def envelope(y, rate, threshold):
     return mask
 
 # Fonction de prédiction audio
-def prediction_audio(path, model):
+def prediction_audio(path,model):
     if model is None:
         raise ValueError("Le modèle est None. Assurez-vous que le modèle est chargé correctement.")
     
@@ -52,7 +52,7 @@ def prediction_audio(path, model):
     unknown_label = "unknown"
     
     T1 = generate_spectrogram(path)
-    spectrogram = T1.reshape(1, 128, 128, 1)
+    spectrogram = T1.reshape(1,128,128,1)
     
     # Faire la prédiction
     prediction = model.predict(spectrogram)
